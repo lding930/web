@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMask DApp</title>
+</head>
+<body>
+    <h1>MetaMask DApp</h1>
+    
+    <button id="connectButton">Connect</button>
+    <button id="switchNetworkButton">Switch Network</button>
+
+    <div id="addressDisplay"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const connectButton = document.getElementById('connectButton');
+            const switchNetworkButton = document.getElementById('switchNetworkButton');
+            const addressDisplay = document.getElementById('addressDisplay');
+
+            connectButton.addEventListener('click', async () => {
+                try {
+                    const accounts = await ethereum.enable();
+                    const connectedAddress = accounts[0];
+
+                    const addressElement = document.createElement('p');
+                    addressElement.textContent = connectedAddress;
+                    addressDisplay.appendChild(addressElement);
+                } catch (error) {
+                    console.error('Error connecting with MetaMask:', error);
+                }
+            });
+
+            switchNetworkButton.addEventListener('click', async () => {
+                try {
+                    // Requesting the provider to switch the network
+                    await ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: '0x1' }], // '0x1' is the Ethereum mainnet chain ID
+                    });
+                } catch (error) {
+                    console.error('Error switching network:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
